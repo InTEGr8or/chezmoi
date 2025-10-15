@@ -1,0 +1,8 @@
+#!/bin/sh
+# assign the arguments to variables
+USER=$1
+SERVER=$2
+# transfer .bashrc
+scp ~/.bashrc ${USER}@${SERVER}:/tmp/.bashrc
+# ssh and source .bashrc
+ssh -t ${USER}@${SERVER} 'bash --rcfile /tmp/.bashrc'

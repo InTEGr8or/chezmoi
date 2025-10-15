@@ -1,0 +1,5 @@
+[custom.chezmoi_status]
+command = "/home/mstouffer/.local/bin/chezmoi_status_prompt.sh"
+when = "true"
+format = "[$output]($style)"
+style = "yellow"

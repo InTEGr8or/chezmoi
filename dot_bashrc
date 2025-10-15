@@ -1,0 +1,14 @@
+# Source all .sh and .bash files in ~/.config/bash
+BASH_CONFIG_DIR="$HOME/.config/bash"
+if [ -d "$BASH_CONFIG_DIR" ]; then
+  for file in "$BASH_CONFIG_DIR"/*.sh "$BASH_CONFIG_DIR"/*.bash; do
+    if [ -r "$file" ]; then
+      # shellcheck source=/dev/null
+      source "$file"
+    fi
+  done
+  unset file
+fi
+unset BASH_CONFIG_DIR
+[[ -f ~/.bash-preexec.sh ]] && source ~/.bash-preexec.sh
+eval "$(atuin init bash)"

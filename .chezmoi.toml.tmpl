@@ -1,0 +1,9 @@
+[data]
+  passCommand = "op item get"
+  hostname = {{ .chezmoi.hostname | quote }}
+  is_personal = {{ eq .chezmoi.hostname "DESKTOP-NU23FHO" }}
+  is_work = {{ eq .chezmoi.hostname "work-machine" }}
+  is_server = {{ eq .chezmoi.hostname "server-name" }}
+[templateFunctions]
+  opGetItem = "op item get {{ '.' }}"
+

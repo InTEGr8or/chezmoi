@@ -1,0 +1,11 @@
+export API_URL=https://drypicnke5.execute-api.us-east-1.amazonaws.com
+export API_ENDPOINT=https://drypicnke5.execute-api.us-east-1.amazonaws.com
+export COGNITO_APP_CLIENT_ID=brun6tdf7iiirfvnpj1iksq3i
+export COGNITO_USER_POOL_ID=us-east-1_zF2pn38Xa
+export TEST_URL=handterm.com
+export GITHUB_CLIENT_ID=Ov23li5VfKhUs0dp781j
+export GITHUB_CLIENT_SECRET=3b6abf14f7b86ee5374ff5e0f94413b036c038c0
+export AWS_REGION=us-east-1
+export AWS_PROFILE=mark
+
+export STACK_NAME=HandTermCdkStack

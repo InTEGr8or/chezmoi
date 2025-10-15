@@ -1,0 +1,70 @@
+# Activate PRS development environment
+prs-dev() {
+  export AWS_PROFILE="@awsProfile@"
+  export AWS_REGION="@awsRegion@"
+  export PRS_ENV="development"
+  echo "PRS development environment activated"
+  echo "AWS Profile: $AWS_PROFILE"
+  echo "AWS Region: $AWS_REGION"
+  echo "Environment: $PRS_ENV"
+  echo ""
+  echo "Available commands:"
+  echo "  prs-connect         - Connect to PRS instance"
+  echo "  split-logs-by-date  - Split log file by date"
+  echo "  prs-list-instances  - List PRS instances"
+}
+
+# List PRS instances
+prs-list-instances() {
+  aws ec2 describe-instances \
+    --filters "@prsInstanceTags@" \
+    --query "Reservations[].Instances[].[InstanceId,State.Name,Tags[?Key=='Name'].Value|[0]]" \
+    --output table
+}
+
+# Connect to PRS instance
+prs-connect() {
+  local instance_id="$1"
+  
+  if [ -z "$instance_id" ]; then
+    # If no instance ID provided, list instances and prompt
+    echo "Available instances:"
+    prs-list-instances
+    
+    echo ""
+    read -p "Enter instance ID to connect to: " instance_id
+  fi
+  
+  if [ -n "$instance_id" ]; then
+    echo "Connecting to instance $instance_id..."
+    aws ssm start-session --target "$instance_id"
+  else
+    echo "No instance ID provided"
+    return 1
+  fi
+}
+
+# Split logs by date
+split-logs-by-date() {
+  local input_file="$1"
+  local output_dir="${2:-split_logs}"
+  
+  if [ -z "$input_file" ]; then
+    echo "Usage: split-logs-by-date <input-file> [output-directory]"
+    return 1
+  fi
+  
+  mkdir -p "$output_dir"
+  
+  awk -v outdir="$output_dir" '
+    /[0-9]{4}-[0-9]{2}-[0-9]{2}/ {
+      date = substr($0, match($0, /[0-9]{4}-[0-9]{2}-[0-9]{2}/), 10)
+      print $0 > outdir "/" date ".log"
+      next
+    }
+    { print $0 >> outdir "/" date ".log" }
+  ' "$input_file"
+  
+  echo "Logs split into $output_dir/"
+  ls -lh "$output_dir/"
+}
