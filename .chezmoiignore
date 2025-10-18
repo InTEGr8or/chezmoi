@@ -1,3 +1,4 @@
 .config/home-manager/generated/**
 .git
 **/.git
+/.config/nvim/*
